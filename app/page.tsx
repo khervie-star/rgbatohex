@@ -1,11 +1,13 @@
 "use client";
 import Image from "next/image";
 import React from "react";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [hexColor, setHexColor] = React.useState("");
   const [rgba, setRgba] = React.useState("");
   const [inputError, setInputError] = React.useState<String | null>("");
+  const [isCopied, setIsCopied] = React.useState(false);
 
   function validateInput(input: string) {
     setInputError(null);
@@ -56,6 +58,32 @@ export default function Home() {
     }
   };
 
+  // This is the function we wrote earlier
+  async function copyTextToClipboard(text: string) {
+    if ("clipboard" in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand("copy", true, text);
+    }
+  }
+
+  // onClick handler function for the copy button
+  const handleCopyClick = () => {
+    // Asynchronously call copyTextToClipboard
+    copyTextToClipboard(hexColor)
+      .then(() => {
+        // If successful, update the isCopied state value
+        setIsCopied(true);
+        toast.success("Copied");
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center p-24 mx-auto">
       <div className="max-w-[800px mx-auto">
@@ -90,7 +118,9 @@ export default function Home() {
           </button>
           {hexColor && (
             <div className="w-[500px] h-[50px] flex justify-between items-center bg-white px-6 font-semibold">
-              <p>{hexColor}</p>
+              <p className={"cursor-pointer"} onClick={handleCopyClick}>
+                {hexColor}
+              </p>
               <div
                 className={`w-[24px] h-[24px]`}
                 style={{ backgroundColor: hexColor }}
