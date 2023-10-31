@@ -85,7 +85,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 mx-auto">
+    <main className="flex min-h-screen flex-col items-center  p-5 lg:p-24 mx-auto">
       <div className="max-w-[800px mx-auto">
         <h2 className="font-montserrat text-[36px] font-bold mb-10">
           RGB to HEX Converter
